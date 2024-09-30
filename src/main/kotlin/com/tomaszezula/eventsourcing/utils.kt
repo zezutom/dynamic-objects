@@ -8,8 +8,11 @@ import kotlin.coroutines.cancellation.CancellationException
 fun<T> attempt(block: () -> T): Result<T> {
     return try {
         Success(block())
-    } catch (e: SdkException) {
-        Failure(e)
+    } catch (e: Exception) {
+        when (e) {
+            is SdkException -> Failure(e)
+            else -> Failure(SdkException(e))
+        }
     }
 }
 

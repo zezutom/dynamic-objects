@@ -1,12 +1,13 @@
 package com.tomaszezula.eventsourcing.handler
 
 import com.tomaszezula.eventsourcing.context.DynamicProperty
+import com.tomaszezula.eventsourcing.context.EvalMode
 import com.tomaszezula.eventsourcing.model.Event
 
-class DefaultEventListener : EventListener {
+class DefaultEventListener(override val mode: EvalMode) : EventListener {
     companion object {
-        fun listener(init: EventListener.() -> Unit): EventListener {
-            return DefaultEventListener().apply(init)
+        fun listener(mode: EvalMode, init: EventListener.() -> Unit): EventListener {
+            return DefaultEventListener(mode).apply(init)
         }
     }
 

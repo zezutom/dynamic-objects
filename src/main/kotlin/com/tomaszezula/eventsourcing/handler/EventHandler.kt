@@ -1,6 +1,7 @@
 package com.tomaszezula.eventsourcing.handler
 
 import com.tomaszezula.eventsourcing.SdkException
+import com.tomaszezula.eventsourcing.context.EvalMode
 import kotlinx.serialization.KSerializer
 import kotlin.reflect.KClass
 
@@ -15,7 +16,7 @@ interface EventHandler {
     fun onError(block: suspend (event: RawEvent, SdkException) -> Unit)
 
     // Register a new event type and its corresponding listener.
-    fun on(eventType: String, block: EventListener.() -> Unit)
+    fun on(eventType: String, mode: EvalMode = EvalMode.Strict, block: EventListener.() -> Unit)
 
     // Add a custom serializer for a specific type.
     fun<T : Any> addSerializer(kclass: KClass<T>, serializer: KSerializer<T>)

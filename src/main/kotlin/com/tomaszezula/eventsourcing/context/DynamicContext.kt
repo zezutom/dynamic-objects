@@ -2,6 +2,8 @@ package com.tomaszezula.eventsourcing.context
 
 import com.tomaszezula.eventsourcing.SdkException
 import com.tomaszezula.eventsourcing.attempt
+import com.tomaszezula.eventsourcing.context.EvalMode.Strict
+import com.tomaszezula.eventsourcing.model.Failure
 import com.tomaszezula.eventsourcing.model.Result
 import com.tomaszezula.eventsourcing.model.Success
 import com.tomaszezula.eventsourcing.serializer.SerializerRegistry.getSerializer
@@ -24,13 +26,15 @@ class DynamicContext {
          * This is called with each event to validate and cast the properties.
          * The resulting context is then passed to the event's context.
          */
-        fun from(source: Map<String, Any?>, vararg property: DynamicProperty<*>): DynamicContext {
+        fun from(mode: EvalMode, source: Map<String, Any?>, vararg property: DynamicProperty<*>): DynamicContext {
             val context = DynamicContext()
             source.forEach { (key, value) ->
                 property.firstOrNull { it.name == key }?.let { p ->
-                    context.set(p) {
-                        cast(p, value.toString())
+                    val result = cast(p, value.toString())
+                    if (mode == Strict && result is Failure) {
+                        throw result.error
                     }
+                    context.set(p) { result }
                 }
             }
             return context
@@ -63,6 +67,7 @@ class DynamicContext {
 
     private val properties = mutableMapOf<DynamicProperty<*>, LazyValue>()
 
+    @Suppress("UNCHECKED_CAST")
     operator fun <T> get(property: DynamicProperty<T>): T {
         val result = if (properties.contains(property)) {
             properties[property]?.invoke()

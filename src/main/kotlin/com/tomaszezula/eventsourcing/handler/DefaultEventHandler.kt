@@ -1,6 +1,7 @@
 package com.tomaszezula.eventsourcing.handler
 
 import com.tomaszezula.eventsourcing.SdkException
+import com.tomaszezula.eventsourcing.context.EvalMode
 import com.tomaszezula.eventsourcing.handler.DefaultEventListener.Companion.listener
 import com.tomaszezula.eventsourcing.model.api.ApiEvent
 import com.tomaszezula.eventsourcing.serializer.SerializerRegistry
@@ -24,7 +25,7 @@ class DefaultEventHandler<T : ApiEvent>(private val serializer: KSerializer<T>) 
         tryCall({ errorHandler(event, it) }) {
             val apiEvent = jsonSerializer.decodeFromString(serializer, event)
             listeners[apiEvent.name]?.let { listener ->
-                listener.on(apiEvent.toModel(*listener.properties()))
+                listener.on(apiEvent.toModel(listener.mode, *listener.properties()))
             }
         }
     }
@@ -37,7 +38,7 @@ class DefaultEventHandler<T : ApiEvent>(private val serializer: KSerializer<T>) 
         SerializerRegistry.register(kclass.java, serializer)
     }
 
-    override fun on(eventType: String, block: EventListener.() -> Unit) {
-        listeners[eventType] = listener(block)
+    override fun on(eventType: String, mode: EvalMode, block: EventListener.() -> Unit) {
+        listeners[eventType] = listener(mode, block)
     }
 }
