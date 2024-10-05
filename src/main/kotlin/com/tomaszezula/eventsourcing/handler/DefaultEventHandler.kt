@@ -4,11 +4,9 @@ import com.tomaszezula.eventsourcing.SdkException
 import com.tomaszezula.eventsourcing.context.EvalMode
 import com.tomaszezula.eventsourcing.handler.DefaultEventListener.Companion.listener
 import com.tomaszezula.eventsourcing.model.api.ApiEvent
-import com.tomaszezula.eventsourcing.serializer.SerializerRegistry
 import com.tomaszezula.eventsourcing.serializer.SerializerRegistry.jsonSerializer
 import com.tomaszezula.eventsourcing.tryCall
 import kotlinx.serialization.KSerializer
-import kotlin.reflect.KClass
 
 class DefaultEventHandler<T : ApiEvent>(private val serializer: KSerializer<T>) : EventHandler {
     companion object {
@@ -34,11 +32,7 @@ class DefaultEventHandler<T : ApiEvent>(private val serializer: KSerializer<T>) 
         errorHandler = block
     }
 
-    override fun <T : Any> addSerializer(kclass: KClass<T>, serializer: KSerializer<T>) {
-        SerializerRegistry.register(kclass.java, serializer)
-    }
-
-    override fun on(eventType: String, mode: EvalMode, block: EventListener.() -> Unit) {
+    override fun listener(eventType: String, mode: EvalMode, block: EventListener.() -> Unit) {
         listeners[eventType] = listener(mode, block)
     }
 }

@@ -64,7 +64,7 @@ class DynamicContext {
                 Boolean::class -> value.toBoolean()
                 Instant::class -> Instant.parse(value)
                 else -> {
-                    getSerializer(property.type.java)?.let {
+                    getSerializer(property)?.let {
                         when (it.descriptor.kind) {
                             is PrimitiveKind -> jsonSerializer.decodeFromJsonElement(it, JsonPrimitive(value))
                             else -> jsonSerializer.decodeFromString(it, value)

@@ -1,21 +1,22 @@
 package com.tomaszezula.eventsourcing.serializer
 
+import com.tomaszezula.eventsourcing.context.DynamicProperty
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
+import kotlin.reflect.KClass
 
 object SerializerRegistry {
     val jsonSerializer = Json {
         ignoreUnknownKeys = true
         isLenient = true
     }
-    private val serializers = mutableMapOf<Class<*>, KSerializer<*>>()
+    private val serializers = mutableMapOf<KClass<*>, KSerializer<*>>()
 
-    fun <T> register(clazz: Class<T>, serializer: KSerializer<T>) {
-        serializers[clazz] = serializer
+    fun register(property: DynamicProperty<*>, serializer: KSerializer<*>) {
+        serializers[property.type] = serializer
     }
 
-    @Suppress("UNCHECKED_CAST")
-    fun <T> getSerializer(clazz: Class<T>): KSerializer<T>? {
-        return serializers[clazz] as KSerializer<T>?
+    fun getSerializer(property: DynamicProperty<*>): KSerializer<*>? {
+        return serializers[property.type]
     }
 }

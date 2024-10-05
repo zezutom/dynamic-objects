@@ -5,6 +5,8 @@ import com.tomaszezula.eventsourcing.attempt
 import com.tomaszezula.eventsourcing.model.Failure
 import com.tomaszezula.eventsourcing.model.Result
 import com.tomaszezula.eventsourcing.model.Result.Companion.NullResult
+import com.tomaszezula.eventsourcing.serializer.SerializerRegistry
+import kotlinx.serialization.KSerializer
 import kotlin.reflect.KClass
 
 typealias PropertyValidator<T> = (T?) -> Boolean
@@ -48,4 +50,9 @@ interface DynamicProperty<T> {
         inline fun <reified T> nullable(name: String, crossinline validator: PropertyValidator<T?>) =
             fromDefaultSupplier<T?>(name, false, { NullResult }, validator)
     }
+}
+
+fun<T> DynamicProperty<T>.withSerializer(serialize: KSerializer<T>): DynamicProperty<T> {
+    SerializerRegistry.register(this, serialize)
+    return this
 }
