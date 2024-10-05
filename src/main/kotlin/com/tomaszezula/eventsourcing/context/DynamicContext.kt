@@ -37,7 +37,18 @@ class DynamicContext {
                     context.set(p) { result }
                 }
             }
-            return context
+            return when (mode) {
+                Strict -> {
+                    val missingProperties = property.toSet() - context.properties.keys.toSet()
+                    missingProperties.filter { it.required }.let { missing ->
+                        if (missing.isNotEmpty()) {
+                            throw SdkException("Missing required properties: ${missing.joinToString { it.name }}")
+                        }
+                    }
+                    context
+                }
+                else -> context
+            }
         }
 
         @OptIn(ExperimentalSerializationApi::class)

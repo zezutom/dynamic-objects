@@ -1,6 +1,7 @@
 package com.tomaszezula.eventsourcing
 
 import com.tomaszezula.eventsourcing.context.DynamicProperty.Companion.required
+import com.tomaszezula.eventsourcing.context.EvalMode
 import com.tomaszezula.eventsourcing.handler.DefaultEventHandler.Companion.handler
 import com.tomaszezula.eventsourcing.model.api.ZoomEvent
 import com.tomaszezula.eventsourcing.serializer.JavaInstantSerializer
@@ -17,12 +18,19 @@ fun main() = runBlocking {
 
         addSerializer(Instant::class, JavaInstantSerializer)
 
-        on("meeting.ended") {
+        on("meeting.ended", mode = EvalMode.Strict) {
             val uuid = add { required<String>("uuid") }
             val startTime = add { required<Instant>("start_time") }
+
+            // This is going to fail fast with Strict mode
+//            val nonExistentInstant = add { required<Instant>("made_up_time") }
+//            val nonExistentString = add { nullable<String>("i_do_not_exist") }
             on { event ->
+                println("I'm handling a meeting.ended event.")
                 println("UUID: ${event[uuid]}")
                 println("Start time: ${event[startTime]}")
+//                println("Made-up time: ${event[nonExistentInstant]}")
+//                println("Made-up string: ${event[nonExistentString]}")
             }
         }
     }

@@ -12,17 +12,20 @@ typealias PropertyValidator<T> = (T?) -> Boolean
 interface DynamicProperty<T> {
     val name: String
     val type: KClass<*>
+    val required: Boolean get() = true
     fun cast(value: Any?): Result<T>
     fun default(): Result<T>
 
     companion object {
         inline fun <reified T> fromDefaultSupplier(
             name: String,
+            required: Boolean,
             crossinline default: () -> Result<T>,
             crossinline validator: PropertyValidator<T> = { true },
         ) =
             object : DynamicProperty<T> {
                 override val name = name
+                override val required = required
                 override val type = T::class
                 override fun cast(value: Any?): Result<T> = attempt {
                     val castValue = value as? T
@@ -33,16 +36,16 @@ interface DynamicProperty<T> {
                 override fun default(): Result<T> = default()
             }
 
-        inline fun <reified T> required(name: String) = fromDefaultSupplier<T>(name, {
+        inline fun <reified T> required(name: String) = fromDefaultSupplier<T>(name, true, {
             Failure(SdkException("Property $name is required"))
         })
 
-        inline fun <reified T> required(name: String, default: Result<T>) = fromDefaultSupplier(name, { default })
+        inline fun <reified T> required(name: String, default: Result<T>) = fromDefaultSupplier(name, true, { default })
         inline fun <reified T> required(name: String, default: Result<T>, crossinline validator: PropertyValidator<T>) =
-            fromDefaultSupplier(name, { default }, validator)
+            fromDefaultSupplier(name, true, { default }, validator)
 
-        inline fun <reified T> nullable(name: String) = fromDefaultSupplier<T?>(name, { NullResult })
+        inline fun <reified T> nullable(name: String) = fromDefaultSupplier<T?>(name, false, { NullResult })
         inline fun <reified T> nullable(name: String, crossinline validator: PropertyValidator<T?>) =
-            fromDefaultSupplier<T?>(name, { NullResult }, validator)
+            fromDefaultSupplier<T?>(name, false, { NullResult }, validator)
     }
 }
