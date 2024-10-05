@@ -1,8 +1,8 @@
-package com.tomaszezula.eventsourcing.handler
+package com.zezutom.dyno.handler
 
-import com.tomaszezula.eventsourcing.context.DynamicProperty
-import com.tomaszezula.eventsourcing.context.EvalMode
-import com.tomaszezula.eventsourcing.model.Event
+import com.zezutom.dyno.context.DynamicProperty
+import com.zezutom.dyno.context.EvalMode
+import com.zezutom.dyno.model.Event
 
 class DefaultEventListener(override val mode: EvalMode) : EventListener {
     companion object {

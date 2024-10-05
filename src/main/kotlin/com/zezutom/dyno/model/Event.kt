@@ -1,7 +1,7 @@
-package com.tomaszezula.eventsourcing.model
+package com.zezutom.dyno.model
 
-import com.tomaszezula.eventsourcing.context.DynamicContext
-import com.tomaszezula.eventsourcing.context.DynamicProperty
+import com.zezutom.dyno.context.DynamicContext
+import com.zezutom.dyno.context.DynamicProperty
 
 data class Event(
     val name: String,

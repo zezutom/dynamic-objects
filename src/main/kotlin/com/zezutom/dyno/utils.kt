@@ -1,17 +1,14 @@
-package com.tomaszezula.eventsourcing
+package com.zezutom.dyno
 
-import com.tomaszezula.eventsourcing.model.Failure
-import com.tomaszezula.eventsourcing.model.Result
-import com.tomaszezula.eventsourcing.model.Success
 import kotlin.coroutines.cancellation.CancellationException
 
-fun<T> attempt(block: () -> T): Result<T> {
+fun<T> attempt(block: () -> T): com.zezutom.dyno.model.Result<T> {
     return try {
-        Success(block())
+        com.zezutom.dyno.model.Success(block())
     } catch (e: Exception) {
         when (e) {
-            is SdkException -> Failure(e)
-            else -> Failure(SdkException(e))
+            is SdkException -> com.zezutom.dyno.model.Failure(e)
+            else -> com.zezutom.dyno.model.Failure(SdkException(e))
         }
     }
 }

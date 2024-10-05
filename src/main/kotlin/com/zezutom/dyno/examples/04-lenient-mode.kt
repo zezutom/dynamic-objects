@@ -1,10 +1,10 @@
-package com.tomaszezula.eventsourcing.examples
+package com.zezutom.dyno.examples
 
-import com.tomaszezula.eventsourcing.context.DynamicProperty.Companion.nullable
-import com.tomaszezula.eventsourcing.context.DynamicProperty.Companion.required
-import com.tomaszezula.eventsourcing.context.EvalMode
-import com.tomaszezula.eventsourcing.handler.DefaultEventHandler.Companion.handler
-import com.tomaszezula.eventsourcing.model.api.ZoomEvent
+import com.zezutom.dyno.context.DynamicProperty.Companion.nullable
+import com.zezutom.dyno.context.DynamicProperty.Companion.required
+import com.zezutom.dyno.context.EvalMode
+import com.zezutom.dyno.handler.DefaultEventHandler.Companion.handler
+import com.zezutom.dyno.model.api.ZoomEvent
 import kotlinx.coroutines.runBlocking
 
 fun main() = runBlocking {
@@ -14,7 +14,7 @@ fun main() = runBlocking {
             println(ex.message)
         }
 
-        listener("meeting.ended", mode = EvalMode.Strict) {
+        listener("meeting.ended", mode = EvalMode.Lenient) {
             val uuid = add { required<String>("uuid") }
             val okNonsense = add { nullable<Int>("nonsense") }
             val badNonsense = add { required<Int>("bad_nonsense") }
@@ -22,6 +22,8 @@ fun main() = runBlocking {
             on { event ->
                 println("I'm handling a meeting.ended event.")
                 println("UUID: ${event[uuid]}")
+                println("OK nonsense: ${event[okNonsense]}")
+                println("Bad nonsense: ${event[badNonsense]}")
             }
         }
     }

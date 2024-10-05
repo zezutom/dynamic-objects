@@ -1,4 +1,4 @@
-package com.tomaszezula.eventsourcing.context
+package com.zezutom.dyno.context
 
 enum class EvalMode {
     // Strict mode will throw an exception as soon as it encounters an error when building the context.

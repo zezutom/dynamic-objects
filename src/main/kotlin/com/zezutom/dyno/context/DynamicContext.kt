@@ -1,19 +1,16 @@
-package com.tomaszezula.eventsourcing.context
+package com.zezutom.dyno.context
 
-import com.tomaszezula.eventsourcing.SdkException
-import com.tomaszezula.eventsourcing.attempt
-import com.tomaszezula.eventsourcing.context.EvalMode.Strict
-import com.tomaszezula.eventsourcing.model.Failure
-import com.tomaszezula.eventsourcing.model.Result
-import com.tomaszezula.eventsourcing.model.Success
-import com.tomaszezula.eventsourcing.serializer.SerializerRegistry.getSerializer
+import com.zezutom.dyno.SdkException
+import com.zezutom.dyno.attempt
+import com.zezutom.dyno.context.EvalMode.Strict
+import com.zezutom.dyno.serializer.SerializerRegistry.getSerializer
 import kotlinx.datetime.Instant
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonPrimitive
 
-typealias LazyValue = () -> Result<*>
+typealias LazyValue = () -> com.zezutom.dyno.model.Result<*>
 
 class DynamicContext {
     companion object {
@@ -31,7 +28,7 @@ class DynamicContext {
             source.forEach { (key, value) ->
                 property.firstOrNull { it.name == key }?.let { p ->
                     val result = cast(p, value.toString())
-                    if (mode == Strict && result is Failure) {
+                    if (mode == Strict && result is com.zezutom.dyno.model.Failure) {
                         throw result.error
                     }
                     context.set(p) { result }
@@ -52,7 +49,7 @@ class DynamicContext {
         }
 
         @OptIn(ExperimentalSerializationApi::class)
-        private fun cast(property: DynamicProperty<*>, value: String): Result<Any?> = attempt {
+        private fun cast(property: DynamicProperty<*>, value: String): com.zezutom.dyno.model.Result<Any?> = attempt {
             val propertyValue: Any? = when (property.type) {
                 String::class -> value
                 Byte::class -> value.toByte()
@@ -72,7 +69,7 @@ class DynamicContext {
                     }
                 }
             }
-            propertyValue?.let { Success(it) } ?: property.cast(value)
+            propertyValue?.let { com.zezutom.dyno.model.Success(it) } ?: property.cast(value)
         }
     }
 
@@ -86,7 +83,7 @@ class DynamicContext {
             property.default()
         }
         when (result) {
-            is Success -> return result.value as T
+            is com.zezutom.dyno.model.Success -> return result.value as T
             else -> throw SdkException("Error casting property ${property.name} to type ${property.type.qualifiedName}")
         }
     }

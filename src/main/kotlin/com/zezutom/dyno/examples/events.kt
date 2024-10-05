@@ -1,4 +1,4 @@
-package com.tomaszezula.eventsourcing.examples
+package com.zezutom.dyno.examples
 
 val meetingEndedEvent =
     """

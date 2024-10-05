@@ -1,7 +1,7 @@
-package com.tomaszezula.eventsourcing.handler
+package com.zezutom.dyno.handler
 
-import com.tomaszezula.eventsourcing.SdkException
-import com.tomaszezula.eventsourcing.context.EvalMode
+import com.zezutom.dyno.SdkException
+import com.zezutom.dyno.context.EvalMode
 
 typealias RawEvent = String
 

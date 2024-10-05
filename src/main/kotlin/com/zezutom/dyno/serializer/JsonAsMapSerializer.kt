@@ -1,4 +1,4 @@
-package com.tomaszezula.eventsourcing.serializer
+package com.zezutom.dyno.serializer
 
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer

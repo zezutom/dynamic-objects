@@ -1,6 +1,6 @@
-package com.tomaszezula.eventsourcing.model
+package com.zezutom.dyno.model
 
-import com.tomaszezula.eventsourcing.SdkException
+import com.zezutom.dyno.SdkException
 
 sealed interface Result<out T> {
     companion object {

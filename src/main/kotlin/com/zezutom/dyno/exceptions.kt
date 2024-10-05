@@ -1,4 +1,4 @@
-package com.tomaszezula.eventsourcing
+package com.zezutom.dyno
 
 class SdkException : Exception {
     constructor(message: String) : super(message)

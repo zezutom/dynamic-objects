@@ -1,11 +1,11 @@
-package com.tomaszezula.eventsourcing.model.api
+package com.zezutom.dyno.model.api
 
-import com.tomaszezula.eventsourcing.context.DynamicContext
-import com.tomaszezula.eventsourcing.context.DynamicProperty
-import com.tomaszezula.eventsourcing.context.EvalMode
-import com.tomaszezula.eventsourcing.model.Event
-import com.tomaszezula.eventsourcing.serializer.JsonAsMapSerializer
-import com.tomaszezula.eventsourcing.serializer.SerializerRegistry.jsonSerializer
+import com.zezutom.dyno.context.DynamicContext
+import com.zezutom.dyno.context.DynamicProperty
+import com.zezutom.dyno.context.EvalMode
+import com.zezutom.dyno.model.Event
+import com.zezutom.dyno.serializer.JsonAsMapSerializer
+import com.zezutom.dyno.serializer.SerializerRegistry.jsonSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

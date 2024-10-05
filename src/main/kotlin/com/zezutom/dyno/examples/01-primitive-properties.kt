@@ -1,8 +1,8 @@
-package com.tomaszezula.eventsourcing.examples
+package com.zezutom.dyno.examples
 
-import com.tomaszezula.eventsourcing.context.DynamicProperty.Companion.required
-import com.tomaszezula.eventsourcing.handler.DefaultEventHandler.Companion.handler
-import com.tomaszezula.eventsourcing.model.api.ZoomEvent
+import com.zezutom.dyno.context.DynamicProperty.Companion.required
+import com.zezutom.dyno.handler.DefaultEventHandler.Companion.handler
+import com.zezutom.dyno.model.api.ZoomEvent
 import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.Instant
 

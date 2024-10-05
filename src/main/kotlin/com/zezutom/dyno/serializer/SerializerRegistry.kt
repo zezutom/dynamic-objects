@@ -1,6 +1,6 @@
-package com.tomaszezula.eventsourcing.serializer
+package com.zezutom.dyno.serializer
 
-import com.tomaszezula.eventsourcing.context.DynamicProperty
+import com.zezutom.dyno.context.DynamicProperty
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 import kotlin.reflect.KClass

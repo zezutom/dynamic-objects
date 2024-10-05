@@ -1,11 +1,11 @@
-package com.tomaszezula.eventsourcing.handler
+package com.zezutom.dyno.handler
 
-import com.tomaszezula.eventsourcing.SdkException
-import com.tomaszezula.eventsourcing.context.EvalMode
-import com.tomaszezula.eventsourcing.handler.DefaultEventListener.Companion.listener
-import com.tomaszezula.eventsourcing.model.api.ApiEvent
-import com.tomaszezula.eventsourcing.serializer.SerializerRegistry.jsonSerializer
-import com.tomaszezula.eventsourcing.tryCall
+import com.zezutom.dyno.SdkException
+import com.zezutom.dyno.context.EvalMode
+import com.zezutom.dyno.handler.DefaultEventListener.Companion.listener
+import com.zezutom.dyno.model.api.ApiEvent
+import com.zezutom.dyno.serializer.SerializerRegistry.jsonSerializer
+import com.zezutom.dyno.tryCall
 import kotlinx.serialization.KSerializer
 
 class DefaultEventHandler<T : ApiEvent>(private val serializer: KSerializer<T>) : EventHandler {
